@@ -1,0 +1,35 @@
+class Solution_iterative_DFS:
+    def isSameTree(self, p, q):
+        stack = [(p, q)]
+        while stack:
+            node1, node2 = stack.pop()
+            if node1 and node2 and node1.val == node2.val:
+                stack.append((node1.left, node2.left))
+                stack.append((node1.right, node2.right))
+            else:
+                if not node1 == node2:
+                    return False
+        return True
+
+
+class Solution_recursive_node_comparison:
+    def isSameTree(self, p, q):
+        if p is None or q is None:
+            return p == q
+        return p.val == q.val and self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+
+
+class Solution_recursive_string_comparison:
+    def isSameTree(self, p, q):
+        """
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: bool
+        """
+
+        def tree2str(root):
+            if root is None:
+                return '#$'
+            return '#' + str(root.val) + tree2str(root.left) + tree2str(root.right)
+
+        return tree2str(p) == tree2str(q)
