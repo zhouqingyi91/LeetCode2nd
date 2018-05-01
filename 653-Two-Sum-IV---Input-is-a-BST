@@ -1,0 +1,31 @@
+class Solution_iterative:
+    def findTarget(self, root, k):
+        stack, table = [root], []
+        while stack:
+            node = stack.pop()
+            if node:
+                if node.val in table:
+                    return True
+                else:
+                    table.append(k - node.val)
+                stack.extend([node.left, node.right])
+        return False
+
+
+class Solution_recursive:
+    def findTarget(self, root, k):
+        """
+        :type root: TreeNode
+        :type k: int
+        :rtype: bool
+        """
+        return self.dfs(self, root, k, [])
+
+    def dfs(self, root, k, d):
+        if root is None:
+            return False
+        if root.val in d:
+            return True
+        else:
+            d.append(k - root.val)
+        return self.dfs(root.left, k, d) or self.dfs(root.right, k, d)
