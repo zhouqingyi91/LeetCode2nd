@@ -1,0 +1,31 @@
+class Solution_iterative:
+    def convertBST(self, root):
+        stack, node = [], root
+        total = 0
+        while stack or node:
+            while node:
+                stack.append(node)
+                node = node.right
+            node = stack.pop()
+            total += node.val
+            node.val = total
+            node = node.left
+        return root
+
+
+class Solution_recursive:
+    def convertBST(self, root):
+        """
+        :type root: TreeNode
+        :rtype: TreeNode
+        """
+        self.total = 0
+
+        def dfs(root):
+            if root:
+                dfs(root.right)
+                self.total += root.val
+                root.val = self.total
+                dfs(root.left)
+        dfs(root)
+        return root
