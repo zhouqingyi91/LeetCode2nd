@@ -1,0 +1,37 @@
+class Solution_iterative:
+    def tree2str(self, t):
+        if t is None:
+            return ''
+        stack, seen, s = [t], set(), ''
+        while stack:
+            node = stack[-1]
+            if node in seen:
+                stack.pop()
+                s += ')'
+            else:
+                seen.add(node)
+                s += '(' + str(node.val)
+                if node.left is None and node.right:
+                    s += '()'
+                if node.right:
+                    stack.append(node.right)
+                if node.left:
+                    stack.append(node.left)
+        return s[1:len(s) - 1]
+
+
+class Solution_recursive_top_down_preorder:
+    def tree2str(self, t):
+        """
+        :type t: TreeNode
+        :rtype: str
+        """
+        if t is None:
+            return ''
+        if t.left is None and t.right is None:
+            return str(t.val)
+        elif t.right is None:
+            return str(t.val) + '(' + self.tree2str(t.left) + ')'
+        else:
+            return str(t.val) + '(' + self.tree2str(t.left) + ')' + \
+                '(' + self.tree2str(t.right) + ')'
