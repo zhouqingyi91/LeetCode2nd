@@ -1,0 +1,38 @@
+class Solution_iterative:
+    def trimBST(self, root, L, R):
+        # find a valid root
+        while root and (root.val < L or root.val > R):
+            if root.val < L:
+                root = root.right
+            if root.val > R:
+                root = root.left
+
+        # remove invalid nodes from left subtree
+        dummy = root
+        while dummy:
+            while dummy.left and dummy.left.val < L:
+                dummy.left = dummy.left.right
+            dummy = dummy.left
+
+        # remove invalid nodes from right subtree
+        dummy = root
+        while dummy:
+            while dummy.right and dummy.right.val > R:
+                dummy.right = dummy.right.left
+            dummy = dummy.right
+
+        return root
+
+
+class Solution_recursive:
+    def trimBST(self, root, L, R):
+        if root is None:
+            return None
+        elif root.val < L:
+            return self.trimBST(root.right, L, R)
+        elif root.val > R:
+            return self.trimBST(root.left, L, R)
+        else:
+            root.left = self.trimBST(root.left, L, R)
+            root.right = self.trimBST(root.right, L, R)
+            return root
