@@ -1,0 +1,25 @@
+class Solution_iterative:
+    def averageOfLevels(self, root):
+        level = [root]
+        ans = []
+        while any(level):
+            ans.append(sum(node.val for node in level) / len(level))
+            level = [kid for node in level for kid in (node.left, node.right) if kid]
+        return ans
+
+
+class Solution_recursive:
+    def averageOfLevels(self, root):
+        def depths(root, depth):
+            if root is None:
+                return None
+            if len(levels) == depth:
+                levels.append([0, 0])
+            levels[depth][0] += root.val
+            levels[depth][1] += 1
+            depths(root.left, depth + 1)
+            depths(root.right, depth + 1)
+
+        levels = []
+        depths(root, 0)
+        return [total / length for total, length in levels]
