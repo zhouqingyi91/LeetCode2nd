@@ -1,0 +1,28 @@
+class Solution_iterative_DFS:
+    def binaryTreePaths(self, root):
+        stack = [(root, '')]
+        ans = []
+        while stack:
+            node, path = stack.pop()
+            if node:
+                if node.left is None and node.right is None:
+                    ans.append(path + str(node.val))
+                stack.append((node.left, path + str(node.val) + '->'))
+                stack.append((node.right, path + str(node.val) + '->'))
+        return ans
+
+
+class Solution_recursive:
+    def binaryTreePaths(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[str]
+        """
+        def dfs(root, path):
+            if root is None:
+                return []
+            if not root.left and not root.right:
+                return [path + str(root.val)]
+            return dfs(root.left, path + str(root.val) + '->') + \
+                dfs(root.right, path + str(root.val) + '->')
+        return dfs(root, '')
