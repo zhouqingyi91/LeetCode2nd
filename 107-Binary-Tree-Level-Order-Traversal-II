@@ -1,0 +1,33 @@
+class Solution_iterative:
+    def levelOrderBottom(self, root):
+        row = [root]
+        ans = []
+        while any(row):
+            ans.insert(0, [node.val for node in row])
+            row = [kid for node in row for kid in (node.left, node.right) if kid]
+            # the above line is equivalent to:
+            # dummy = []
+            # for node in row:
+            #     for kid in (node.left, node.right):
+            #         if kid:
+            #             dummy.append(kid)
+            # row = dummy
+        return ans
+
+
+class Solution_recursive:
+    def levelOrderBottom(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[List[int]]
+        """
+        def dfs(root, depth):
+            if root:
+                if len(stack) == depth:
+                    stack.insert(0, [])
+                stack[-depth - 1].append(root.val)
+                dfs(root.left, depth + 1)
+                dfs(root.right, depth + 1)
+        stack = []
+        dfs(root, 0)
+        return stack
