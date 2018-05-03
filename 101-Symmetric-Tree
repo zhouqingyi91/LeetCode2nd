@@ -1,0 +1,29 @@
+class Solution_iterative_DFS:
+    def isSymmetric(self, root):
+        stack = [(root, root)]
+        while stack:
+            one, two = stack.pop()
+            if one is None or two is None:
+                if not (one == two):
+                    return False
+            elif one.val != two.val:
+                return False
+            else:
+                stack.append((one.left, two.right))
+                stack.append((one.right, two.left))
+        return True
+
+
+class Solution_recursive:
+    def isSymmetric(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        return self.helper(root, root)
+
+    def helper(self, one, two):
+        if one is None or two is None:
+            return one == two
+        return one.val == two.val and self.helper(one.left, two.right) and \
+            self.helper(one.right, two.left)
