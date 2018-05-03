@@ -1,0 +1,39 @@
+class Solution_iterative_DFS_node_comparison:
+    def isSubtree(self, root, t):
+        stack = [root]
+        while stack:
+            node = stack.pop()
+            if node:
+                if self.isSameTree(node, t):
+                    return True
+                stack.extend([node.left, node.right])
+        return False
+
+    def isSameTree(self, p, q):
+        stack = [(p, q)]
+        while stack:
+            node1, node2 = stack.pop()
+            if node1 and node2 and node1.val == node2.val:
+                stack.append((node1.left, node2.left))
+                stack.append((node1.right, node2.right))
+            else:
+                if not node1 == node2:
+                    return False
+        return True
+
+
+class Solution_recursive_node_comparison:
+    def isSubtree(self, root, t):
+        """
+        :type s: TreeNode
+        :type t: TreeNode
+        :rtype: bool
+        """
+        if root is None:
+            return False
+        return self.isSameTree(root, t) or self.isSubtree(root.left, t) or self.isSubtree(root.right, t)
+
+    def isSameTree(self, p, q):
+        if p is None or q is None:
+            return p == q
+        return p.val == q.val and self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
