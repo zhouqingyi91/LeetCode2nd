@@ -1,0 +1,65 @@
+# Question url:
+# https://leetcode.com/problems/path-sum-iii/description/
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+
+class Solution_iterative_postorder:
+    def pathSum(self, root, target):
+        count, total, d = 0, 0, {0: 1}
+        stack = [(0, root)]
+        while stack:
+            seen, node = stack.pop()
+            if node is None:
+                continue
+            if not seen:
+                stack.extend([(1, node), (0, node.right), (0, node.left)])
+                total += node.val
+                count += d.get(total - target, 0)
+                d[total] = d.get(total, 0) + 1
+            else:
+                d[total] -= 1
+                total -= node.val
+        return count
+
+
+class Solution_recursive_with_dict:
+    def pathSum(self, root, target):
+        def helper(root, target, d, total):
+            if root is None:
+                return 0
+            total += root.val
+            count = d.get(total - target, 0)
+            d[total] = d.get(total, 0) + 1
+            count += helper(root.left, target, d, total) + helper(root.right, target, d, total)
+            d[total] -= 1
+            return count
+
+        return helper(root, target, {0: 1}, 0)
+
+
+# search for pathSum for every node in root
+class Solution_naive_recursive:
+    def pathSum(self, root, target):
+        """
+        :type root: TreeNode
+        :type sum: int
+        :rtype: int
+        """
+        if root is None:
+            return 0
+        return self.path(root, target, 0) + self.pathSum(root.left, target) + self.pathSum(root.right, target)
+
+    def path(self, root, target, total):
+        if root is None:
+            return 0
+        total += root.val
+        if total == target:
+            return 1 + self.path(root.left, target, total) + self.path(root.right, target, total)
+        return self.path(root.left, target, total) + self.path(root.right, target, total)
