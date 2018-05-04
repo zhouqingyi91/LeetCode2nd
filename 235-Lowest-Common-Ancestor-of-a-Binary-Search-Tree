@@ -1,0 +1,27 @@
+class Solution_iterative(object):
+    def lowestCommonAncestor(self, root, p, q):
+        node = root
+        while node:
+            if q.val < node.val > p.val:
+                node = node.left
+            elif q.val > node.val < p.val:
+                node = node.right
+            else:
+                return node
+
+
+class Solution_recursive(object):
+    def lowestCommonAncestor(self, root, p, q):
+        """
+        :type root: TreeNode
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: TreeNode
+        """
+        if root is None:
+            return None
+        if q.val < root.val > p.val:
+            return self.lowestCommonAncestor(root.left, p, q)
+        if q.val > root.val < p.val:
+            return self.lowestCommonAncestor(root.right, p, q)
+        return root
