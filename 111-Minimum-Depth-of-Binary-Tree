@@ -1,0 +1,26 @@
+class Solution_iterative:
+    def minDepth(self, root):
+        ans = float('inf')
+        stack = [(root, 1)]
+        while stack:
+            node, depth = stack.pop()
+            if node:
+                if not node.left and not node.right:
+                    ans = min(ans, depth)
+                stack.extend([(node.left, depth + 1), (node.right, depth + 1)])
+        return ans if root else 0
+
+
+class Solution_recursive:
+    def minDepth(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        if root is None:
+            return 0
+        left = self.minDepth(root.left) + 1
+        right = self.minDepth(root.right) + 1
+        if not root.left or not root.right:
+            return max(left, right)
+        return min(left, right)
