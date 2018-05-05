@@ -1,0 +1,44 @@
+class Solution_iterative:
+    def longestUnivaluePath(self, root):
+        postorder = [(0, root, None)]
+        count = 0
+        d = {None: 0}
+        while postorder:
+            seen, node, parent = postorder.pop()
+            if node is None:
+                continue
+            if not seen:
+                postorder.append((1, node, parent))
+                postorder.append((0, node.right, node.val))
+                postorder.append((0, node.left, node.val))
+            else:
+                if node.val == parent:
+                    d[node] = max(d[node.left], d[node.right]) + 1
+                else:
+                    d[node] = 0
+                count = max(count, d[node.left] + d[node.right])
+
+        return count
+
+
+class Solution_recursive:
+    def longestUnivaluePath(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        self.count = 0
+        self.dfs(root)
+        return self.count
+
+    def dfs(self, root):
+        if root is None:
+            return 0
+        left = self.dfs(root.left)
+        right = self.dfs(root.right)
+
+        left = left + 1 if root.left and root.left.val == root.val else 0
+        right = right + 1 if root.right and root.right.val == root.val else 0
+
+        self.count = max(self.count, left + right)
+        return max(left, right)
