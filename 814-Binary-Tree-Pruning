@@ -1,0 +1,32 @@
+class Solution_iterative_postorder:
+    def pruneTree(self, root):
+        stack = [(0, root)]
+        while stack:
+            seen, node = stack.pop()
+            if node is None:
+                continue
+            if not seen:
+                stack.extend([(1, node), (0, node.right), (0, node.left)])
+            else:
+                if node.left and not (node.left.val or node.left.left or node.left.right):
+                    node.left = None
+                if node.right and not (node.right.val or node.right.left or node.right.right):
+                    node.right = None
+        return root
+
+
+class Solution_recursive:
+    def pruneTree(self, root):
+        """
+        :type root: TreeNode
+        :rtype: TreeNode
+        """
+        if root is None:
+            return None
+        root.left = self.pruneTree(root.left)
+        root.right = self.pruneTree(root.right)
+
+        if root.val == 0 and not root.left and not root.right:
+            root = None
+
+        return root
