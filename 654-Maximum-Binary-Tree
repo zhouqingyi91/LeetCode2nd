@@ -1,0 +1,60 @@
+class Solution_simple_smart_iterative:
+    def constructMaximumBinaryTree(self, nums):
+        stack = []
+        for i in range(len(nums)):
+            cur = TreeNode(nums[i])
+            while stack and stack[-1].val < nums[i]:
+                cur.left = stack.pop()
+            if stack:
+                stack[-1].right = cur
+            stack.append(cur)
+        return stack[0]
+
+
+class Solution_iterative:
+    def constructMaximumBinaryTree(self, nums):
+        if nums == []:
+            return None
+        root = TreeNode(None)
+        stack = [(root, 0, len(nums) - 1)]
+        while stack:
+            node, left, right = stack.pop()
+            index = nums.index(max(nums[left:right + 1]))
+            node.val = nums[index]
+            if left <= index - 1:
+                node.left = TreeNode(None)
+                stack.append((node.left, left, index - 1))
+            if right >= index + 1:
+                node.right = TreeNode(None)
+                stack.append((node.right, index + 1, right))
+        return root
+
+
+class Solution_recursive_boundary:
+    def constructMaximumBinaryTree(self, nums):
+        return self.dfs(nums, 0, len(nums) - 1)
+
+    def dfs(self, nums, left, right):
+        if left > right:
+            return None
+        index = nums.index(max(nums[left:right + 1]))
+        root = TreeNode(nums[index])
+        root.left = self.dfs(nums, left, index - 1)
+        root.right = self.dfs(nums, index + 1, right)
+        return root
+
+
+class Solution_recursive_slicing_array:
+    def constructMaximumBinaryTree(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: TreeNode
+        """
+        if nums == []:
+            return None
+        index = nums.index(max(nums))
+        root = TreeNode(nums[index])
+        root.left = self.constructMaximumBinaryTree(nums[:index])
+        root.right = self.constructMaximumBinaryTree(nums[index + 1:])
+
+        return root
