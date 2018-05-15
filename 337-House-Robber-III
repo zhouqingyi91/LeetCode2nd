@@ -1,0 +1,34 @@
+# the value in the couple is (yesrob, norob)
+# yesrob is the max amount with robbing the current node
+# norob is the max amount without robbing the current node
+class Solution_iterative_postorder:
+    def rob(self, root):
+        stack = [(0, root)]
+        d = {None: (0, 0)}
+        while stack:
+            seen, node = stack.pop()
+            if node is None:
+                continue
+            if not seen:
+                stack.extend([(1, node), (0, node.right), (0, node.left)])
+            else:
+                yesrob = d[node.left][1] + d[node.right][1] + node.val
+                norob = max(d[node.left]) + max(d[node.right])
+                d[node] = (yesrob, norob)
+        return max(d[root])
+
+
+class Solution_recursive:
+    def rob(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        def couple(root):
+            if root is None:
+                return (0, 0)
+            left = couple(root.left)
+            right = couple(root.right)
+            return (left[1] + right[1] + root.val, max(left) + max(right))
+
+        return max(couple(root))
