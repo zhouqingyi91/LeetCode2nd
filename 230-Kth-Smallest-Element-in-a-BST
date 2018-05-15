@@ -1,0 +1,27 @@
+class Solution_iterative:
+    def kthSmallest(self, root, k):
+        stack, node = [], root
+        while stack or node:
+            while node:
+                stack.append(node)
+                node = node.left
+            node = stack.pop()
+            if k == 1:
+                return node.val
+            else:
+                k -= 1
+            node = node.right
+
+
+class Solution_recursive:
+    def kthSmallest(self, root, k):
+        """
+        :type root: TreeNode
+        :type k: int
+        :rtype: int
+        """
+        def inorder(root):
+            if root is None:
+                return []
+            return inorder(root.left) + [root.val] + inorder(root.right)
+        return inorder(root)[k - 1]
