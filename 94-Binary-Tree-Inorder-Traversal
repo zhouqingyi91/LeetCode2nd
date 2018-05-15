@@ -1,0 +1,36 @@
+class Solution_iterative:
+    def inorderTraversal(self, root):
+        ans, stack, node = [], [], root
+        while stack or node:
+            while node:
+                stack.append(node)
+                node = node.left
+            node = stack.pop()
+            ans.append(node.val)
+            node = node.right
+        return ans
+
+
+class Solution_iterative2:
+    def inorderTraversal(self, root):
+        ans, stack = [], [(0, root)]
+        while stack:
+            seen, node = stack.pop()
+            if node is None:
+                continue
+            if not seen:
+                stack.extend([(0, node.right), (1, node), (0, node.left)])
+            else:
+                ans.append(node.val)
+        return ans
+
+
+class Solution_recursive:
+    def inorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        if root is None:
+            return []
+        return self.inorderTraversal(root.left) + [root.val] + self.inorderTraversal(root.right)
