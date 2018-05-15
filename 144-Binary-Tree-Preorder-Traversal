@@ -1,0 +1,34 @@
+class Solution_iterative:
+    def preorderTraversal(self, root):
+        ans, stack = [], [root]
+        while stack:
+            node = stack.pop()
+            if node:
+                ans.append(node.val)
+                stack.extend([node.right, node.left])
+        return ans
+
+
+class Solution_iterative2:
+    def preorderTraversal(self, root):
+        ans, stack = [], [(0, root)]
+        while stack:
+            seen, node = stack.pop()
+            if node is None:
+                continue
+            if not seen:
+                stack.extend([(0, node.right), (0, node.left), (1, node)])
+            else:
+                ans.append(node.val)
+        return ans
+
+
+class Solution_recursive:
+    def preorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        if root is None:
+            return []
+        return [root.val] + self.preorderTraversal(root.left) + self.preorderTraversal(root.right)
